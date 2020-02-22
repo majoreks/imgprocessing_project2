@@ -7,8 +7,14 @@ h5_results = 'output/results.h5'
 csvPath = 'output/csv/'
 resultsOutputPath = 'output/results.txt'
 
-names = ['moments', 'histogram', 'haralickTexture',
-         'locBinPatterns', 'allFeatures']
+# before running names with all the feature names inside,
+# we need to make sure that there actually are reuslts for
+# each of these calculated and saved to a file
+
+# possibilites:
+# 'moments', 'histogram', 'haralickTexture', 'locBinPatterns', 'allFeatures'
+
+names = ['haralickTexture']   
 
 f = open(resultsOutputPath, 'w')
 h5f_results = h5py.File(h5_results, 'r')

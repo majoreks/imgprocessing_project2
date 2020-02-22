@@ -3,45 +3,31 @@ import numpy as np
 import mahotas
 import cv2 as cv
 
-fixed_size = tuple((500, 500))
-bins = 8
+# setting the feature at the bottom
+
+size = tuple((500, 500))
 
 # shape features
-
-
 def fd_hu_moments(image):
-    image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    feature = cv.HuMoments(cv.moments(image)).flatten()
-    return feature
+    img = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    feat = cv.HuMoments(cv.moments(img)).flatten()
+    return feat
 
 # haralick texture
-
-
 def fd_haralick(image):
-    # convert the image to grayscale
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    # compute the haralick texture feature vector
     haralick = mahotas.features.haralick(gray).mean(axis=0)
-    # return the result
     return haralick
 
 # color histogram
-
-
 def fd_histogram(image):
-    # convert the image to HSV color-space
-    image = cv.cvtColor(image, cv.COLOR_BGR2HSV)
-    # compute the color histogram
-    hist = cv.calcHist([image], [0, 1, 2], None, [
-        bins, bins, bins], [0, 256, 0, 256, 0, 256])
-    # normalize the histogram
+    img = cv.cvtColor(image, cv.COLOR_BGR2HSV)
+    hist = cv.calcHist([img], [0, 1, 2], None, [
+        8, 8, 8], [0, 256, 0, 256, 0, 256])
     cv.normalize(hist, hist)
-    # return the histogram
     return hist.flatten()
 
 # local features
-
-
 def fd_localBinaryPatters(image, numPoints=24, radius=8):
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     lbp = feature.local_binary_pattern(
@@ -49,21 +35,20 @@ def fd_localBinaryPatters(image, numPoints=24, radius=8):
     (hist, _) = np.histogram(lbp.ravel(),
                              bins=np.arange(0, numPoints + 3),
                              range=(0, numPoints + 2))
-    # normalize the histogram
     hist = hist.astype("float")
     hist /= (hist.sum() + 1e-7)
-    # return the histogram of Local Binary Patterns
     return hist
 
-
+# change this function according to which feature you want to check
 def getGlobalFeatures(file):
     image = cv.imread(file)
-    image = cv.resize(image, fixed_size)
-    fv_hu_moments = fd_hu_moments(image)
+    image = cv.resize(image, size)
+    #fv_hu_moments = fd_hu_moments(image)
     fv_haralick = fd_haralick(image)
-    fv_histogram = fd_histogram(image)
-    fv_lbp = fd_localBinaryPatters(image)
-    return np.hstack([fv_hu_moments, fv_haralick, fv_histogram, fv_lbp])
+    #fv_histogram = fd_histogram(image)
+    #fv_lbp = fd_localBinaryPatters(image)
+    return np.hstack([fv_haralick]) # don't forget to add feature vector (fv_) to the hstack here
 
-
-setting = "allFeatures"  # setting the setting heh
+setting = "haralickTexture"  # setting the setting heh
+# possibilities:
+# 'moments', 'histogram', 'haralickTexture', 'locBinPatterns', 'allFeatures'
