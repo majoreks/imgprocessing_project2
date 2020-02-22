@@ -1,0 +1,16 @@
+One big data set with cross validation results:
+
+haralickTexture: 0.836
+
+80-20 split results:
+Leaves: ['circinatum', 'garryana', 'glabrum', 'kelloggii', 'macrophyllum', 'negundo']
+
+haralickTexture method:
+circinatum: 0.692
+garryana: 1.0
+glabrum: 0.667
+kelloggii: 0.842
+macrophyllum: 0.75
+negundo: 0.875
+mean result for this method: 0.804
+
